@@ -9,20 +9,22 @@
 </head>
 <body>
 
-  <!-- 페이지 넘길 때 나는 소리 -->
+  <!-- 책장 넘기는 소리 -->
   <audio id="pageSound" src="sounds/paging.mp3" preload="auto"></audio>
 
   <!-- 동화책 화면 -->
   <div id="storybook">
     <img id="storyImage" src="images/story1.png" alt="동화 페이지">
 
-    <div id="pageIndicator">1 / 4</div>
+    <!-- 이전 버튼 -->
+    <button id="prevBtn" class="nav-btn left">
+      <img src="images/prev.png" alt="이전">
+    </button>
 
-    <!-- 아래쪽 이전/다음 버튼 -->
-<div id="navButtons">
-  <button id="prevBtn" class="navCircle">‹</button>
-  <button id="nextBtn" class="navCircle">›</button>
-</div>
+    <!-- 다음 버튼 -->
+    <button id="nextBtn" class="nav-btn right">
+      <img src="images/next.png" alt="다음">
+    </button>
   </div>
 
   <script src="script.js"></script>
