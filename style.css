@@ -28,7 +28,7 @@ html, body {
   width: 100vw;
   height: 100vh;
 
-  /* 화면 꽉 채우기 */
+  /* 화면 꽉 차게 */
   object-fit: cover;
 
   display: block;
@@ -38,10 +38,13 @@ html, body {
 /* 버튼 공통 */
 .nav-btn {
   position: absolute;
-  bottom: 22px;
 
-  width: 72px;
-  height: 72px;
+  /* 글씨랑 안 겹치게 화면 좌우 가운데 배치 */
+  top: 50%;
+  transform: translateY(-50%);
+
+  width: 58px;
+  height: 58px;
 
   border: none;
   background: transparent;
@@ -56,29 +59,29 @@ html, body {
 
 /* 버튼 이미지 */
 .nav-btn img {
-  width: 72px;
-  height: 72px;
+  width: 58px;
+  height: 58px;
   object-fit: contain;
 
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.28));
 }
 
-/* 누를 때 살짝 작아짐 */
+/* 버튼 누를 때 */
 .nav-btn:active {
-  transform: scale(0.92);
+  transform: translateY(-50%) scale(0.92);
 }
 
-/* 이전 버튼 숨김/비활성 느낌 */
+/* 첫 페이지에서 이전 버튼 숨김/비활성 느낌 */
 .nav-btn:disabled {
   opacity: 0.25;
 }
 
 /* 왼쪽 버튼 */
 .left {
-  left: 18px;
+  left: 10px;
 }
 
 /* 오른쪽 버튼 */
 .right {
-  right: 18px;
+  right: 10px;
 }
