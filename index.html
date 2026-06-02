@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>지각대장 존 </title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- 페이지 넘길 때 나는 소리 -->
+  <audio id="pageSound" src="sounds/paging.mp3" preload="auto"></audio>
+
+  <!-- 동화책 화면 -->
+  <div id="storybook">
+    <img id="storyImage" src="images/story1.png" alt="동화 페이지">
+
+    <div id="pageIndicator">1 / 4</div>
+
+    <!-- 아래쪽 이전/다음 버튼 -->
+<div id="navButtons">
+  <button id="prevBtn" class="navCircle">‹</button>
+  <button id="nextBtn" class="navCircle">›</button>
+</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
