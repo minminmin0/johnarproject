@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-
   <title>GPS AR</title>
 
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
@@ -11,36 +10,30 @@
   <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/aframe/build/aframe-ar.js"></script>
 
   <link rel="stylesheet" href="ar-style.css">
-
-  <script defer src="ar-script.js"></script>
 </head>
 
 <body>
 
-  <!-- 위쪽: 시계 이미지만 -->
   <div id="clockPanel">
     <img id="clockImage" src="images/am830.png" alt="8시 30분">
   </div>
 
-  <!-- 아래쪽: 멘트 -->
   <div id="messagePanel">
-    <div id="storyText">
-       9시까지 빨리 가보자!
-    </div>
+    <div id="storyText">위치를 확인하는 중입니다...</div>
   </div>
 
-  <!-- 진행 버튼 -->
-  <button id="actionBtn" class="image-button" style="display: none;">
+  <button id="actionBtn" style="display: none;">
     <img id="actionBtnImg" src="images/throwglovebutton.png" alt="장갑 던지기">
-    <span id="actionBtnText"></span>
   </button>
 
   <a-scene
+    id="arScene"
     vr-mode-ui="enabled: false"
-    arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false"
-    renderer="antialias: true; alpha: true"
+    arjs="sourceType: webcam; debugUIEnabled: false"
+    renderer="antialias: true; alpha: true; logarithmicDepthBuffer: true"
+    webkit-playsinline
+    playsinline
   >
-
     <a-assets>
       <a-asset-item id="crocModel" src="models/crocodile.glb"></a-asset-item>
       <a-asset-item id="gloveModel" src="models/glove.glb"></a-asset-item>
@@ -49,48 +42,35 @@
 
     <a-camera gps-new-camera="gpsMinDistance: 5"></a-camera>
 
-    <!-- 1번 위치: 뭉게네 / 악어 + 장갑 -->
     <a-entity
-      id="crocPlace"
-      gps-new-entity-place="latitude: 37.650197; longitude: 127.013888; maxDistance: 150"
-    >
-
-      <a-entity
-        id="crocodile"
-        gltf-model="#crocModel"
-        position="0 0 -7"
-        scale="30 30 30"
-        rotation="0 180 0">
-      </a-entity>
-
-      <a-entity
-        id="glove"
-        gltf-model="#gloveModel"
-        position="-1 0.7 -3"
-        scale="9 9 9"
-        rotation="0 30 0">
-      </a-entity>
-
-    </a-entity>
-
-    <!-- 2번 위치: 쌍문제1동 / 고릴라에게 잡힌 선생님 -->
-    <a-entity
-      id="gorillaPlace"
-      gps-new-entity-place="latitude: 37.650392; longitude: 127.013551; maxDistance: 80"
+      id="crocodile"
+      gltf-model="#crocModel"
+      gps-new-entity-place="latitude: 37.650197; longitude: 127.013888"
+      scale="80 80 80"
+      rotation="0 180 0"
       visible="false"
-    >
+    ></a-entity>
 
-      <a-entity
-        id="gorillaTeacher"
-        gltf-model="#gorillaTeacherModel"
-        position="0 1.5 -6"
-        scale="2.5 2.5 2.5"
-        rotation="0 180 0">
-      </a-entity>
+    <a-entity
+      id="glove"
+      gltf-model="#gloveModel"
+      gps-new-entity-place="latitude: 37.650197; longitude: 127.013888"
+      scale="9 9 9"
+      rotation="0 30 0"
+      visible="false"
+    ></a-entity>
 
-    </a-entity>
+    <a-entity
+      id="gorillaTeacher"
+      gltf-model="#gorillaTeacherModel"
+      gps-new-entity-place="latitude: 37.650392; longitude: 127.013551"
+      scale="2.5 2.5 2.5"
+      rotation="0 180 0"
+      visible="false"
+    ></a-entity>
 
   </a-scene>
 
+  <script src="ar-script.js"></script>
 </body>
 </html>
