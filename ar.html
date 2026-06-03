@@ -12,7 +12,7 @@
 
   <link rel="stylesheet" href="ar-style.css">
 
-  <script src="ar-script.js"></script>
+  <script defer src="ar-script.js"></script>
 </head>
 
 <body>
@@ -25,13 +25,17 @@
   <!-- 아래쪽: 멘트 -->
   <div id="messagePanel">
     <div id="storyText">
-      악어가 길목을 서성이며 존의 앞을 막고 있습니다.<br>
-      장갑을 던져 악어의 시선을 돌려보세요.
+       오늘은 정말 늦지 말아야겠죠?<br>
+       9시까지 달려봅시다
+      
     </div>
   </div>
 
   <!-- 진행 버튼 -->
-  <button id="actionBtn">장갑 던지기</button>
+  <button id="actionBtn" class="image-button" style="display: none;">
+    <img id="actionBtnImg" src="images/throwglovebutton.png" alt="장갑 던지기">
+    <span id="actionBtnText"></span>
+  </button>
 
   <a-scene
     vr-mode-ui="enabled: false"
@@ -50,7 +54,7 @@
     <!-- 1번 위치: 뭉게네 / 악어 + 장갑 -->
     <a-entity
       id="crocPlace"
-      gps-new-entity-place="latitude: 37.652734; longitude: 127.014713; maxDistance: 80"
+      gps-new-entity-place="latitude: 37.650197; longitude: 127.013888; maxDistance: 150"
     >
 
       <a-entity

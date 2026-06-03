@@ -9,8 +9,8 @@ const gorillaPlace = document.getElementById("gorillaPlace");
 const gorillaTeacher = document.getElementById("gorillaTeacher");
 
 // 1번 위치: 뭉게네 / 악어 + 장갑
-const crocLat = 37.652734;
-const crocLon = 127.014713;
+const crocLat = 37.650197;
+const crocLon = 127.013888;
 
 // 2번 위치: 쌍문제1동 / 고릴라 선생님
 const gorillaLat = 37.650392;
