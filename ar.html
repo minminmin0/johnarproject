@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <title>GPS AR</title>
+
+
+  <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+
+
+  <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/three.js/build/ar-threex-location-only.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/aframe/build/aframe-ar.js"></script>
+
+  <script>
+    AFRAME.registerComponent("play-all-animations", {
+      init: function () {
+        this.mixer = null;
+        this.clock = new THREE.Clock();
+
+        this.el.addEventListener("model-loaded", () => {
+          const model = this.el.getObject3D("mesh");
+
+
+
+          const animations = model.animations;
+
+
+
+          this.mixer = new THREE.AnimationMixer(model);
+
+          animations.forEach((clip) => {
+            this.mixer.clipAction(clip).play();
+          });
+
+          console.log("애니메이션 재생:", animations.length);
+        });
+      },
+
+      tick: function () {
+        if (this.mixer) {
+          this.mixer.update(this.clock.getDelta());
+        }
+      }
+    });
+  </script>
+
+  <style>
+      #clockBox {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 8px 0 10px;
+      }
+
+      #clockImage {
+        width: 170px;
+        max-width: 70%;
+        height: auto;
+        display: block;
+      }
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      background: black;
+    }
+
+    #storyPanel {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+
+      width: 88%;
+      max-width: 430px;
+
+      background: rgba(255, 246, 220, 0.95);
+      color: #3a2a16;
+
+      padding: 13px 15px;
+      border-radius: 18px;
+
+      text-align: center;
+      font-size: 14px;
+      line-height: 1.5;
+
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+    }
+
+    #sceneTitle {
+      font-weight: bold;
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    #timeBox {
+      margin: 6px 0 8px;
+      font-weight: bold;
+      color: #8a3b16;
+    }
+
+    #storyText {
+      word-break: keep-all;
+    }
+
+    #actionBtn {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      z-index: 9999;
+
+      border: none;
+      border-radius: 24px;
+      padding: 13px 22px;
+
+      background: #fff0b8;
+      color: #3a2a16;
+
+      font-size: 16px;
+      font-weight: bold;
+
+      box-shadow: 0 5px 14px rgba(0, 0, 0, 0.3);
+    }
+
+    #actionBtn:active {
+      transform: translateX(-50%) scale(0.95);
+    }
+
+    #backBtn {
+      position: fixed;
+      left: 14px;
+      bottom: 24px;
+      z-index: 9999;
+
+      border: none;
+      border-radius: 20px;
+      padding: 10px 13px;
+
+      background: rgba(255, 246, 220, 0.95);
+      color: #3a2a16;
+
+      font-size: 13px;
+      font-weight: bold;
+
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- 상단 이야기 UI -->
+  <div id="storyPanel">
+    <div id="sceneTitle">악어가 길을 막았다!</div>
+
+  <div id="clockBox">
+    <img id="clockImage" src="images/am830.png" alt="현재 시각 8시 30분">
+  </div>
+
+    <div id="storyText">
+      악어가 존의 길을 막고 있습니다.<br>
+      장갑을 던져 악어의 시선을 돌려보세요.
+    </div>
+  </div>
+
+  <!-- 인터랙션 버튼 -->
+  <button id="actionBtn">장갑 던지기</button>
+
+  <!-- 동화책으로 돌아가기 -->
+  <button id="backBtn" onclick="location.href='index.html'">
+    ← 동화책
+  </button>
+
+  <a-scene
+    vr-mode-ui="enabled: false"
+    arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false"
+    renderer="antialias: true; alpha: true"
+  >
+
+    <!-- 모델 파일 미리 불러오기 -->
+    <a-assets>
+      <a-asset-item id="crocModel" src="models/crocodile.glb"></a-asset-item>
+      <a-asset-item id="gloveModel" src="models/glove.glb"></a-asset-item>
+      <a-asset-item id="gorillaTeacherModel" src="models/gorillaandteacher.glb"></a-asset-item>
+    </a-assets>
+
+    <!-- GPS 카메라: 수업자료의 gps-new-camera -->
+    <a-camera gps-new-camera="gpsMinDistance: 5"></a-camera>
+
+    <!-- GPS 위치에 배치되는 사건 그룹 -->
+    <a-entity
+      id="eventGroup"
+      gps-new-entity-place="latitude: 37.653307; longitude: 127.015937; maxDistance: 80"
+    >
+
+      <!-- 악어 -->
+      <a-entity
+        id="crocodile"
+        gltf-model="#crocModel"
+        play-all-animations
+        position="0 0 -7"
+        scale="4 4 4"
+        rotation="0 180 0">
+      </a-entity>
+
+      <!-- 장갑 -->
+      <a-entity
+        id="glove"
+        gltf-model="#gloveModel"
+        position="-1 0.7 -3"
+        scale="1 1 1"
+        rotation="0 30 0">
+      </a-entity>
+
+      <!-- 고릴라에게 잡힌 선생님: 처음에는 안 보이게 -->
+      <a-entity
+        id="gorillaTeacher"
+        gltf-model="#gorillaTeacherModel"
+        position="0 1.5 -6"
+        scale="2.5 2.5 2.5"
+        rotation="0 180 0"
+        visible="false">
+      </a-entity>
+
+    </a-entity>
+
+  </a-scene>
+
+  <script>
+  const actionBtn = document.getElementById("actionBtn");
+  const clockImage = document.getElementById("clockImage");
+  const storyText = document.getElementById("storyText");
+  const sceneTitle = document.getElementById("sceneTitle");
+
+  const crocodile = document.getElementById("crocodile");
+  const glove = document.getElementById("glove");
+  const gorillaTeacher = document.getElementById("gorillaTeacher");
+
+  let sceneStep = 0;
+
+  actionBtn.addEventListener("click", function () {
+
+    // 1단계: 장갑 던지기
+    if (sceneStep === 0) {
+      sceneStep = 1;
+
+      // 시계 이미지를 8:45로 변경
+      clockImage.src = "images/am845.png";
+      clockImage.alt = "현재 시각 8시 45분";
+
+      storyText.innerHTML =
+        "존은 장갑을 악어 쪽으로 던졌습니다.<br>" +
+        "악어가 장갑에 정신이 팔린 사이,<br>" +
+        "존은 다시 학교로 달려갔습니다.";
+
+      // 장갑이 악어 쪽으로 날아가는 연출
+      glove.setAttribute("animation__throw", {
+        property: "position",
+        from: "-1 0.7 -3",
+        to: "1.5 0.7 -6",
+        dur: 900,
+        easing: "easeOutQuad"
+      });
+
+      // 장갑이 날아간 뒤 악어가 반응
+      setTimeout(function () {
+        crocodile.setAttribute("animation__turn", {
+          property: "rotation",
+          from: "0 180 0",
+          to: "0 250 0",
+          dur: 800,
+          easing: "easeInOutSine"
+        });
+
+        crocodile.setAttribute("animation__shrink", {
+          property: "scale",
+          from: "4 4 4",
+          to: "0.3 0.3 0.3",
+          dur: 1200,
+          easing: "easeInQuad"
+        });
+      }, 900);
+
+      // 악어와 장갑 숨기기
+      setTimeout(function () {
+        crocodile.setAttribute("visible", "false");
+        glove.setAttribute("visible", "false");
+        actionBtn.textContent = "정문으로 가기";
+      }, 2300);
+    }
+
+    // 2단계: 정문 앞 반전 장면
+    else if (sceneStep === 1) {
+      sceneStep = 2;
+
+      sceneTitle.textContent = "정문 앞에서 본 장면";
+
+      // 시계 이미지를 9:00으로 변경
+      clockImage.src = "images/am900.png";
+      clockImage.alt = "현재 시각 9시";
+
+      storyText.innerHTML =
+        "정문 앞에 도착한 존은 믿기 힘든 장면을 보았습니다.<br>" +
+        "선생님이 고릴라에게 붙잡혀 있었습니다.";
+
+      gorillaTeacher.setAttribute("visible", "true");
+
+      gorillaTeacher.setAttribute("animation__appear", {
+        property: "scale",
+        from: "0.2 0.2 0.2",
+        to: "2.5 2.5 2.5",
+        dur: 900,
+        easing: "easeOutBack"
+      });
+
+      actionBtn.textContent = "이제 선생님도 믿겠죠?";
+    }
+
+    // 3단계: 끝
+    else {
+      alert("존의 이야기는 정말이었습니다!");
+      location.href = "index.html";
+    }
+  });
+</script>
+</body>
+</html>
