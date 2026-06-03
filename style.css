@@ -85,3 +85,22 @@ html, body {
 .right {
   right: 10px;
 }
+
+function showPage() {
+  storyImage.src = storyImages[currentPage];
+
+  // story3(인덱스 2)만 다르게 처리
+  if (currentPage === 2) {
+    storyImage.style.objectFit = "cover";
+    storyImage.style.objectPosition = "center top";
+  } else {
+    storyImage.style.objectFit = "contain";
+    storyImage.style.objectPosition = "center";
+  }
+
+  if (currentPage === 0) {
+    prevBtn.style.display = "none";
+  } else {
+    prevBtn.style.display = "flex";
+  }
+}

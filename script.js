@@ -16,14 +16,20 @@ const pageSound = document.getElementById("pageSound");
 function showPage() {
   storyImage.src = storyImages[currentPage];
 
-  // 첫 페이지에서는 이전 버튼 숨기기
+  if (currentPage === 2) {
+    storyImage.style.objectFit = "cover";
+    storyImage.style.objectPosition = "center top";
+  } else {
+    storyImage.style.objectFit = "contain";
+    storyImage.style.objectPosition = "center";
+  }
+
   if (currentPage === 0) {
     prevBtn.style.display = "none";
   } else {
     prevBtn.style.display = "flex";
   }
 }
-
 // 책장 넘기는 소리
 function playSound() {
   pageSound.currentTime = 0;
