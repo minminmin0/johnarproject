@@ -48,7 +48,7 @@ if (navigator.geolocation) {
       console.log("악어 위치까지 거리:", distanceToCroc);
 
       // 악어 위치 근처에 도착했을 때만 멘트/버튼 등장
-      if (distanceToCroc <= 120 && crocSceneReady === false) {
+      if (distanceToCroc <= 20 && crocSceneReady === false) {
         crocSceneReady = true;
 
         storyText.innerHTML =
@@ -59,7 +59,7 @@ if (navigator.geolocation) {
       }
 
       // 아직 멀리 있을 때
-      if (distanceToCroc > 120 && crocSceneReady === false) {
+      if (distanceToCroc > 20 && crocSceneReady === false) {
         storyText.innerHTML =
           "AR 위치를 찾는 중입니다.<br>" +
           "악어 장면 위치까지 약 " + Math.round(distanceToCroc) + "m 남았습니다.";
@@ -99,22 +99,21 @@ actionBtn.addEventListener("click", function () {
 
     // 장갑이 악어 쪽으로 날아가는 연출
     glove.setAttribute("animation__throw", {
-      property: "position",
-      from: "-1 0.7 -3",
-      to: "1.5 0.7 -6",
-      dur: 900,
-      easing: "easeOutQuad"
-    });
+  property: "position",
+  from: "-1 1.2 -3",
+  to: "2 1.5 -6",
+  dur: 900,
+  easing: "easeOutQuad"
+});
 
     // 악어가 장갑 쪽을 보는 것처럼 회전 + 작아짐
-    setTimeout(function () {
-      crocodile.setAttribute("animation__turn", {
-        property: "rotation",
-        from: "0 180 0",
-        to: "0 250 0",
-        dur: 800,
-        easing: "easeInOutSine"
-      });
+    crocodile.setAttribute("animation__shrink", {
+  property: "scale",
+  from: "25 25 25",
+  to: "0.5 0.5 0.5",
+  dur: 1200,
+  easing: "easeInQuad"
+});
 
       crocodile.setAttribute("animation__shrink", {
         property: "scale",
