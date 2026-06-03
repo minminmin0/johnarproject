@@ -49,15 +49,23 @@ if (navigator.geolocation) {
 
       // 악어 위치 근처에 도착했을 때만 멘트/버튼 등장
       if (distanceToCroc <= 20 && crocSceneReady === false) {
-        crocSceneReady = true;
+  crocSceneReady = true;
 
-        storyText.innerHTML =
-          "악어가 길목을 서성이며 존의 앞을 막고 있습니다.<br>" +
-          "장갑을 던져 악어의 시선을 돌려보세요.";
+  // 악어 보이게 하기
+  crocodile.setAttribute("visible", "true");
+  crocodile.setAttribute("position", "0 -1 -6");
+  crocodile.setAttribute("scale", "25 25 25");
+  crocodile.setAttribute("rotation", "0 180 0");
 
-        actionBtn.style.display = "block";
-      }
+  // 장갑은 아직 숨김
+  glove.setAttribute("visible", "false");
 
+  storyText.innerHTML =
+    "악어가 길목을 서성이며 준의 앞을 막고 있습니다.<br>" +
+    "장갑을 던져 악어의 시선을 돌려보세요.";
+
+  actionBtn.style.display = "block";
+}
       // 아직 멀리 있을 때
       if (distanceToCroc > 20 && crocSceneReady === false) {
         storyText.innerHTML =
@@ -86,57 +94,70 @@ if (navigator.geolocation) {
 actionBtn.addEventListener("click", function () {
 
   // 1단계: 장갑 던지기
-  if (sceneStep === 0) {
-    sceneStep = 1;
+if (sceneStep === 0) {
+  sceneStep = 1;
 
-    clockImage.src = "images/am845.png";
-    clockImage.alt = "8시 45분";
+  clockImage.src = "images/am845.png";
+  clockImage.alt = "8시 45분";
+
+  storyText.innerHTML =
+    "준은 장갑을 악어 쪽으로 던졌습니다.<br>" +
+    "악어가 장갑에 정신이 팔린 사이,<br>" +
+    "준은 다시 학교로 달려갔습니다.";
+
+  // 장갑 보이게 하기
+  glove.setAttribute("visible", "true");
+  glove.setAttribute("position", "-1 1.2 -3");
+  glove.setAttribute("rotation", "0 0 0");
+  glove.setAttribute("scale", "4 4 4");
+
+  // 기존 애니메이션 제거
+  glove.removeAttribute("animation__throw");
+  glove.removeAttribute("animation__spin");
+  crocodile.removeAttribute("animation__shrink");
+
+  // 장갑이 악어 쪽으로 날아가는 연출
+  glove.setAttribute("animation__throw", {
+    property: "position",
+    from: "-1 1.2 -3",
+    to: "2 1.5 -6",
+    dur: 900,
+    easing: "easeOutQuad"
+  });
+
+  // 장갑 회전
+  glove.setAttribute("animation__spin", {
+    property: "rotation",
+    from: "0 0 0",
+    to: "360 720 360",
+    dur: 900,
+    easing: "linear"
+  });
+
+  // 장갑이 날아간 뒤 악어가 작아짐
+  setTimeout(function () {
+    crocodile.setAttribute("animation__shrink", {
+      property: "scale",
+      from: "25 25 25",
+      to: "0.5 0.5 0.5",
+      dur: 1200,
+      easing: "easeInQuad"
+    });
+  }, 900);
+
+  // 악어와 장갑 숨기기
+  setTimeout(function () {
+    crocodile.setAttribute("visible", "false");
+    glove.setAttribute("visible", "false");
 
     storyText.innerHTML =
-      "존은 장갑을 악어 쪽으로 던졌습니다.<br>" +
-      "악어가 장갑에 정신이 팔린 사이,<br>" +
-      "존은 다시 학교로 달려갔습니다.";
+      "악어를 피하느라 15분이나 지나버렸습니다.<br>" +
+      "준은 서둘러 정문으로 향했습니다.";
 
-    // 장갑이 악어 쪽으로 날아가는 연출
-    glove.setAttribute("animation__throw", {
-  property: "position",
-  from: "-1 1.2 -3",
-  to: "2 1.5 -6",
-  dur: 900,
-  easing: "easeOutQuad"
-});
-
-    // 악어가 장갑 쪽을 보는 것처럼 회전 + 작아짐
-    crocodile.setAttribute("animation__shrink", {
-  property: "scale",
-  from: "25 25 25",
-  to: "0.5 0.5 0.5",
-  dur: 1200,
-  easing: "easeInQuad"
-});
-
-      crocodile.setAttribute("animation__shrink", {
-        property: "scale",
-        from: "4 4 4",
-        to: "0.3 0.3 0.3",
-        dur: 1200,
-        easing: "easeInQuad"
-      });
-    }, 900);
-
-    // 악어와 장갑 숨기기
-    setTimeout(function () {
-      crocodile.setAttribute("visible", "false");
-      glove.setAttribute("visible", "false");
-
-      storyText.innerHTML =
-        "악어를 피하느라 15분이나 지나버렸습니다.<br>" +
-        "존은 서둘러 정문으로 향했습니다.";
-
-      actionBtnImg.src = "images/gotogatebutton.png";
-      actionBtnImg.alt = "정문으로 가기";
-    }, 2300);
-  }
+    actionBtnImg.src = "images/gotogatebutton.png";
+    actionBtnImg.alt = "정문으로 가기";
+  }, 2300);
+}
 
   // 2단계: 고릴라 선생님 장면
   else if (sceneStep === 1) {
