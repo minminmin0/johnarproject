@@ -1,16 +1,16 @@
 const storyText = document.getElementById("storyText");
-const crocodile = document.getElementById("crocodile");
+const teacher = document.getElementById("teacher");
 
 // ==============================
-// 악어를 띄울 위치
-// 방금 네가 찍은 현재 위치 좌표
+// 고릴라 선생님을 띄울 위치
+// 방금 네가 있던 위치 기준
 // ==============================
-const crocLat = 37.653095;
-const crocLon = 127.015969;
+const targetLat = 37.653095;
+const targetLon = 127.015969;
 
-// 두 좌표 사이 거리 계산 함수
+// 두 좌표 사이 거리 계산
 function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371000; // 지구 반지름, 단위 m
+  const R = 6371000;
 
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
@@ -26,10 +26,10 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
-// 악어 기본 설정
-crocodile.setAttribute("visible", "true");
-crocodile.setAttribute("scale", "16 16 16");
-crocodile.setAttribute("rotation", "0 180 0");
+// 고릴라 선생님 기본 설정
+teacher.setAttribute("visible", "true");
+teacher.setAttribute("scale", "3 3 3");
+teacher.setAttribute("rotation", "0 180 0");
 
 if (navigator.geolocation) {
   navigator.geolocation.watchPosition(
@@ -38,22 +38,27 @@ if (navigator.geolocation) {
       const userLon = position.coords.longitude;
       const accuracy = position.coords.accuracy;
 
-      const distanceToCroc = getDistance(userLat, userLon, crocLat, crocLon);
+      const distanceToTarget = getDistance(userLat, userLon, targetLat, targetLon);
 
       storyText.innerHTML =
         "현재 위치 확인 중<br>" +
         "현재 위도: " + userLat.toFixed(6) + "<br>" +
         "현재 경도: " + userLon.toFixed(6) + "<br>" +
-        "목표 위도: " + crocLat + "<br>" +
-        "목표 경도: " + crocLon + "<br>" +
+        "목표 위도: " + targetLat + "<br>" +
+        "목표 경도: " + targetLon + "<br>" +
         "GPS 오차: 약 " + Math.round(accuracy) + "m<br>" +
-        "악어까지 약 " + Math.round(distanceToCroc) + "m<br><br>" +
-        "악어는 계속 보이게 해둔 상태입니다.<br>" +
-        "화면을 천천히 돌려보세요.";
+        "고릴라 선생님까지 약 " + Math.round(distanceToTarget) + "m";
 
-      crocodile.setAttribute("visible", "true");
-      crocodile.setAttribute("scale", "16 16 16");
-      crocodile.setAttribute("rotation", "0 180 0");
+      if (distanceToTarget <= 20) {
+        storyText.innerHTML +=
+          "<br><br>고릴라 선생님 표시 구역입니다.<br>화면을 천천히 돌려보세요.";
+      } else {
+        storyText.innerHTML +=
+          "<br><br>테스트 중이라 거리가 멀어도 계속 보이게 해둔 상태입니다.";
+      }
+
+      teacher.setAttribute("visible", "true");
+      teacher.setAttribute("scale", "3 3 3");
     },
 
     function (error) {
