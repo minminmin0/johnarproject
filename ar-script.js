@@ -10,14 +10,14 @@ const gorillaTeacher = document.getElementById("gorillaTeacher");
 
 // ==============================
 // 1단계: 악어 위치
-// 지도에 찍어둔 첫 번째 핀 위치
+// 네가 네 번째 사진에서 보고 싶다고 한 위치
 // ==============================
-const crocLat = 37.6516656;
-const crocLon = 127.0149836;
+const crocLat = 37.6520698;
+const crocLon = 127.0150517;
 
 // ==============================
 // 2단계: 고릴라 선생님 위치
-// 네가 기존에 쓰던 고릴라 위치 유지
+// 기존에 네가 쓰던 값 유지
 // ==============================
 const gorillaLat = 37.6528396;
 const gorillaLon = 127.0163341;
@@ -26,6 +26,17 @@ const gorillaLon = 127.0163341;
 let crocReady = false;      // 악어 위치 도착 여부
 let crocDone = false;       // 악어 장면 완료 여부
 let gorillaShown = false;   // 고릴라 등장 여부
+
+// 크기값
+const CROC_SCALE = "1.8 1.8 1.8";
+const CROC_END_SCALE = "0.1 0.1 0.1";
+const GLOVE_SCALE = "0.5 0.5 0.5";
+const GORILLA_SCALE = "3.5 3.5 3.5";
+
+// 회전값
+const CROC_ROTATION = "0 0 0";
+const GLOVE_ROTATION = "0 0 0";
+const GORILLA_ROTATION = "0 0 0";
 
 // 두 좌표 사이 거리 계산 함수
 function getDistance(lat1, lon1, lat2, lon2) {
@@ -85,10 +96,12 @@ if (navigator.geolocation) {
           clockImage.alt = "8시 30분";
 
           crocodile.setAttribute("visible", "true");
-          crocodile.setAttribute("scale", "4.5 4.5 4.5");
-          crocodile.setAttribute("rotation", "0 0 0");
+          crocodile.setAttribute("scale", CROC_SCALE);
+          crocodile.setAttribute("rotation", CROC_ROTATION);
 
           glove.setAttribute("visible", "false");
+          glove.setAttribute("scale", GLOVE_SCALE);
+          glove.setAttribute("rotation", GLOVE_ROTATION);
 
           storyText.innerHTML =
             "길목에 악어가 나타났습니다.<br>" +
@@ -105,7 +118,6 @@ if (navigator.geolocation) {
         console.log("GPS 오차:", accuracy);
         console.log("악어까지 거리:", distanceToCroc);
 
-        // 악어 장면이 끝나기 전에는 고릴라 단계로 넘어가지 않음
         return;
       }
 
@@ -130,8 +142,8 @@ if (navigator.geolocation) {
           clockImage.alt = "9시";
 
           gorillaTeacher.setAttribute("visible", "true");
-          gorillaTeacher.setAttribute("scale", "3.5 3.5 3.5");
-          gorillaTeacher.setAttribute("rotation", "0 0 0");
+          gorillaTeacher.setAttribute("scale", GORILLA_SCALE);
+          gorillaTeacher.setAttribute("rotation", GORILLA_ROTATION);
 
           storyText.innerHTML =
             "정문 앞에 도착한 존은<br>" +
@@ -188,16 +200,17 @@ actionBtn.addEventListener("click", function () {
 
     // 장갑 등장
     glove.setAttribute("visible", "true");
-    glove.setAttribute("scale", "0.9 0.9 0.9");
-    glove.setAttribute("rotation", "0 0 0");
+    glove.setAttribute("scale", GLOVE_SCALE);
+    glove.setAttribute("rotation", GLOVE_ROTATION);
 
     // 기존 애니메이션 제거
     glove.removeAttribute("animation__spin");
-    glove.removeAttribute("animation__grow");
+    glove.removeAttribute("animation__hide");
+
     crocodile.removeAttribute("animation__turn");
     crocodile.removeAttribute("animation__shrink");
 
-    // 장갑이 나타나며 빙글 도는 느낌
+    // 장갑은 커지지 않고 회전만 함
     glove.setAttribute("animation__spin", {
       property: "rotation",
       from: "0 0 0",
@@ -206,11 +219,21 @@ actionBtn.addEventListener("click", function () {
       easing: "linear"
     });
 
+    // 장갑은 잠깐 보였다가 작아짐
+    setTimeout(function () {
+      glove.setAttribute("animation__hide", {
+        property: "scale",
+        from: GLOVE_SCALE,
+        to: "0.1 0.1 0.1",
+        dur: 600,
+        easing: "easeInQuad"
+      });
+    }, 900);
 
     // 악어가 방향을 트는 느낌
     crocodile.setAttribute("animation__turn", {
       property: "rotation",
-      from: "0 0 0",
+      from: CROC_ROTATION,
       to: "0 120 0",
       dur: 900,
       easing: "easeInOutQuad"
@@ -220,8 +243,8 @@ actionBtn.addEventListener("click", function () {
     setTimeout(function () {
       crocodile.setAttribute("animation__shrink", {
         property: "scale",
-        from: "4.5 4.5 4.5",
-        to: "0.2 0.2 0.2",
+        from: CROC_SCALE,
+        to: CROC_END_SCALE,
         dur: 1300,
         easing: "easeInQuad"
       });
@@ -240,6 +263,6 @@ actionBtn.addEventListener("click", function () {
 
       actionBtn.style.display = "none";
       actionBtn.disabled = false;
-    }, 2300);
+    }, 2500);
   }
 });
