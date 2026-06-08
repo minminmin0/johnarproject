@@ -32,27 +32,28 @@ body {
 #messagePanel {
   position: fixed;
   left: 50%;
-  bottom: 125px;
+  bottom: 28px;
   transform: translateX(-50%);
   z-index: 9999;
 
-  width: 86%;
-  max-width: 420px;
+  width: 72%;
+  max-width: 320px;
 
-  background: rgba(255, 246, 220, 0.94);
+  background: rgba(255, 246, 220, 0.82);
   color: #3a2a16;
 
-  padding: 13px 15px;
-  border-radius: 18px;
+  padding: 8px 10px;
+  border-radius: 14px;
 
   text-align: center;
-  font-size: 15px;
-  line-height: 1.55;
+  font-size: 12px;
+  line-height: 1.35;
   word-break: keep-all;
 
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
-}
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.22);
 
+  pointer-events: none;
+}
 /* 진행 버튼 공통 위치 */
 #actionBtn {
   position: fixed;
