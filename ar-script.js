@@ -10,22 +10,21 @@ const gorillaTeacher = document.getElementById("gorillaTeacher");
 
 // ==============================
 // 1단계: 악어 위치
-// 네가 네 번째 사진에서 보고 싶다고 한 위치
 // ==============================
 const crocLat = 37.6516291;
 const crocLon = 127.0149008;
 
 // ==============================
 // 2단계: 고릴라 선생님 위치
-// 기존에 네가 쓰던 값 유지
 // ==============================
 const gorillaLat = 37.6528396;
 const gorillaLon = 127.0163341;
 
 // 장면 상태값
-let crocReady = false;      // 악어 위치 도착 여부
-let crocDone = false;       // 악어 장면 완료 여부
-let gorillaShown = false;   // 고릴라 등장 여부
+let crocReady = false;
+let crocDone = false;
+let gorillaShown = false;
+let endingStep = 0;
 
 // 크기값
 const CROC_SCALE = "1.8 1.8 1.8";
@@ -54,13 +53,38 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
+// 텍스트 버튼으로 바꾸는 함수
+function showTextButton(text) {
+  actionBtn.className = "text-button";
+  actionBtn.innerHTML = text;
+  actionBtn.style.display = "block";
+  actionBtn.disabled = false;
+}
+
+// 장갑 이미지 버튼으로 바꾸는 함수
+function showGloveButton() {
+  actionBtn.className = "image-button";
+  actionBtn.innerHTML =
+    '<img id="actionBtnImg" src="images/throwglovebutton.png" alt="장갑 던지기">';
+  actionBtn.style.display = "block";
+  actionBtn.disabled = false;
+}
+
+// 버튼 숨기기
+function hideButton() {
+  actionBtn.style.display = "none";
+  actionBtn.disabled = false;
+}
+
 // 처음 상태 정리
 crocodile.setAttribute("visible", "false");
 glove.setAttribute("visible", "false");
 gorillaTeacher.setAttribute("visible", "false");
 
-actionBtn.style.display = "none";
-actionBtn.disabled = false;
+hideButton();
+
+// 처음 멘트
+storyText.innerHTML = "얼른 학교로 가보자!";
 
 if (navigator.geolocation) {
   navigator.geolocation.watchPosition(
@@ -78,14 +102,12 @@ if (navigator.geolocation) {
       if (crocDone === false) {
 
         // 아직 악어 위치에 도착하지 않았을 때
-        if (distanceToCroc > 25 && crocReady === false) {
-          storyText.innerHTML =
-            "악어가 나타난 길목으로 이동 중입니다.<br>" +
-            "악어 위치까지 약 " + Math.round(distanceToCroc) + "m";
+        if (distanceToCroc > 12 && crocReady === false) {
+          storyText.innerHTML = "얼른 학교로 가보자!";
 
           crocodile.setAttribute("visible", "false");
           glove.setAttribute("visible", "false");
-          actionBtn.style.display = "none";
+          hideButton();
         }
 
         // 악어 위치에 도착했을 때
@@ -107,10 +129,7 @@ if (navigator.geolocation) {
             "길목에 악어가 나타났습니다.<br>" +
             "장갑을 던져 악어의 시선을 돌려보세요.";
 
-          actionBtnImg.src = "images/throwglovebutton.png";
-          actionBtnImg.alt = "장갑 던지기";
-          actionBtn.style.display = "block";
-          actionBtn.disabled = false;
+          showGloveButton();
         }
 
         console.log("현재 위도:", userLat);
@@ -129,14 +148,15 @@ if (navigator.geolocation) {
         if (distanceToGorilla > 25) {
           storyText.innerHTML =
             "악어를 피해 다시 학교로 달려갑니다.<br>" +
-            "고릴라 선생님까지 약 " + Math.round(distanceToGorilla) + "m";
+            "어서 정문으로 가야 합니다.";
 
           gorillaTeacher.setAttribute("visible", "false");
-          actionBtn.style.display = "none";
+          hideButton();
         }
 
         if (distanceToGorilla <= 25) {
           gorillaShown = true;
+          endingStep = 0;
 
           clockImage.src = "images/am900.png";
           clockImage.alt = "9시";
@@ -150,7 +170,7 @@ if (navigator.geolocation) {
             "믿기 힘든 장면을 보았습니다.<br>" +
             "선생님이 고릴라에게 붙잡혀 있었습니다.";
 
-          actionBtn.style.display = "none";
+          showTextButton("선생님 말 듣기");
         }
       }
 
@@ -185,9 +205,13 @@ if (navigator.geolocation) {
 }
 
 // ==============================
-// 장갑 던지기 버튼 클릭
+// 버튼 클릭 이벤트
 // ==============================
 actionBtn.addEventListener("click", function () {
+
+  // ==============================
+  // 1. 장갑 던지기
+  // ==============================
   if (crocReady === true && crocDone === false) {
     actionBtn.disabled = true;
 
@@ -261,8 +285,47 @@ actionBtn.addEventListener("click", function () {
         "악어가 장갑을 물고 도망갔습니다.<br>" +
         "존은 서둘러 정문으로 향합니다.";
 
-      actionBtn.style.display = "none";
-      actionBtn.disabled = false;
+      hideButton();
     }, 2500);
+
+    return;
+  }
+
+  // ==============================
+  // 2. 고릴라 장면 이후 대사 진행
+  // ==============================
+  if (gorillaShown === true) {
+
+    // 선생님 대사
+    if (endingStep === 0) {
+      endingStep = 1;
+
+      storyText.innerHTML =
+        "“존 패트릭 노먼 맥헤너시.<br>" +
+        "난 지금 커다란 털복숭이 고릴라한테<br>" +
+        "붙들려 천장에 매달려 있다.<br>" +
+        "빨리 날 좀 내려다오.”";
+
+      showTextButton("존의 대답");
+      return;
+    }
+
+    // 존의 대답
+    if (endingStep === 1) {
+      endingStep = 2;
+
+      storyText.innerHTML =
+        "존은 선생님을 바라보며 말했습니다.<br><br>" +
+        "“이 동네 천장에 커다란 털복숭이<br>" +
+        "고릴라 따위는 살지 않아요, 선생님.”";
+
+      showTextButton("동화책으로 돌아가기");
+      return;
+    }
+
+    // 끝
+    if (endingStep === 2) {
+      location.href = "index.html";
+    }
   }
 });

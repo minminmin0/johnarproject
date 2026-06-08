@@ -23,18 +23,14 @@ html, body {
   align-items: center;
 }
 
-/* 동화 이미지 */
 #storyImage {
   width: 100vw;
   height: 100vh;
-
-  /* 화면 꽉 차게 */
   object-fit: contain;
-
+  object-position: center;
   display: block;
   background-color: #f0e8d0;
 }
-
 /* 버튼 공통 */
 .nav-btn {
   position: absolute;
@@ -86,21 +82,3 @@ html, body {
   right: 10px;
 }
 
-function showPage() {
-  storyImage.src = storyImages[currentPage];
-
-  // story3(인덱스 2)만 다르게 처리
-  if (currentPage === 2) {
-    storyImage.style.objectFit = "cover";
-    storyImage.style.objectPosition = "center top";
-  } else {
-    storyImage.style.objectFit = "contain";
-    storyImage.style.objectPosition = "center";
-  }
-
-  if (currentPage === 0) {
-    prevBtn.style.display = "none";
-  } else {
-    prevBtn.style.display = "flex";
-  }
-}

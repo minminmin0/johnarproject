@@ -24,19 +24,19 @@ function playPageSound() {
 function showPage() {
   storyImage.src = storyImages[currentPage];
 
-  if (currentPage === 2) {
-    storyImage.style.objectFit = "cover";
-    storyImage.style.objectPosition = "center top";
-  } else {
-    storyImage.style.objectFit = "contain";
-    storyImage.style.objectPosition = "center";
-  }
+  // 모든 페이지를 잘리지 않게 표시
+  storyImage.style.objectFit = "contain";
+  storyImage.style.objectPosition = "center";
 
+  // 첫 페이지에서는 이전 버튼 숨김
   if (currentPage === 0) {
     prevBtn.style.display = "none";
   } else {
     prevBtn.style.display = "flex";
   }
+
+  // 다음 버튼은 항상 보이게
+  nextBtn.style.display = "flex";
 }
 
 prevBtn.addEventListener("click", function () {
@@ -53,6 +53,7 @@ nextBtn.addEventListener("click", function () {
     playPageSound();
     showPage();
   } else {
+    // 마지막 페이지에서 다음 버튼 누르면 AR로 이동
     window.location.href = "ar.html";
   }
 });
