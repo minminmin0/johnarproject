@@ -17,7 +17,7 @@ function playPageSound() {
 
   pageSound.currentTime = 0;
   pageSound.play().catch(function () {
-    // 모바일에서는 사용자 터치 후에만 소리가 날 수 있음
+    // 모바일에서는 터치 후에만 소리가 재생될 수 있음
   });
 }
 
