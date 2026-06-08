@@ -2,13 +2,15 @@ const storyText = document.getElementById("storyText");
 const gorillaTeacher = document.getElementById("gorillaTeacher");
 
 // ==============================
-// 고릴라 선생님을 띄울 위치
-// 두 번째 사진 위치 기준
+// 정문 앞 목표 위치
+// 두 번째 사진 기준 좌표
 // ==============================
 const gorillaLat = 37.652915;
 const gorillaLon = 127.016362;
 
-// 두 좌표 사이 거리 계산 함수
+let gorillaShown = false;
+
+// 두 좌표 사이 거리 계산
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371000;
 
@@ -26,10 +28,11 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
-// 처음부터 계속 보이게 하기
-gorillaTeacher.setAttribute("visible", "true");
-gorillaTeacher.setAttribute("scale", "16 16 16");
-gorillaTeacher.setAttribute("rotation", "180 0 0");
+// 처음에는 숨김
+gorillaTeacher.setAttribute("visible", "false");
+gorillaTeacher.setAttribute("position", "0 -1 -6");
+gorillaTeacher.setAttribute("scale", "3.5 3.5 3.5");
+gorillaTeacher.setAttribute("rotation", "0 0 0");
 
 if (navigator.geolocation) {
   navigator.geolocation.watchPosition(
@@ -45,21 +48,44 @@ if (navigator.geolocation) {
         gorillaLon
       );
 
-      storyText.innerHTML =
-        "현재 위치 확인 중<br>" +
-        "현재 위도: " + userLat.toFixed(6) + "<br>" +
-        "현재 경도: " + userLon.toFixed(6) + "<br>" +
-        "목표 위도: " + gorillaLat + "<br>" +
-        "목표 경도: " + gorillaLon + "<br>" +
-        "GPS 오차: 약 " + Math.round(accuracy) + "m<br>" +
-        "고릴라 선생님까지 약 " + Math.round(distanceToGorilla) + "m<br><br>" +
-        "고릴라 선생님은 목표 위치에 계속 표시됩니다.<br>" +
-        "화면을 천천히 돌려보세요.";
+      // 아직 목표 위치 근처에 도착하지 않았을 때
+      if (distanceToGorilla > 25 && gorillaShown === false) {
+        storyText.innerHTML =
+          "정문으로 이동하는 중입니다.<br>" +
+          "현재 위도: " + userLat.toFixed(6) + "<br>" +
+          "현재 경도: " + userLon.toFixed(6) + "<br>" +
+          "목표 위도: " + gorillaLat + "<br>" +
+          "목표 경도: " + gorillaLon + "<br>" +
+          "GPS 오차: 약 " + Math.round(accuracy) + "m<br>" +
+          "고릴라 선생님까지 약 " + Math.round(distanceToGorilla) + "m";
 
-      // 절대 숨기지 않음
-      gorillaTeacher.setAttribute("visible", "true");
-      gorillaTeacher.setAttribute("scale", "16 16 16");
-      gorillaTeacher.setAttribute("rotation", "180 0 0");
+        gorillaTeacher.setAttribute("visible", "false");
+      }
+
+      // 목표 위치 근처에 도착했을 때
+      if (distanceToGorilla <= 25 && gorillaShown === false) {
+        gorillaShown = true;
+
+        gorillaTeacher.setAttribute("visible", "true");
+        gorillaTeacher.setAttribute("position", "0 -1 -6");
+        gorillaTeacher.setAttribute("scale", "3.5 3.5 3.5");
+        gorillaTeacher.setAttribute("rotation", "0 0 0");
+
+        storyText.innerHTML =
+          "정문 앞에 도착한 존은<br>" +
+          "믿기 힘든 장면을 보았습니다.<br>" +
+          "선생님이 고릴라에게 붙잡혀 있었습니다.";
+      }
+
+      // 한 번 나타난 뒤에는 계속 보이게 유지
+      if (gorillaShown === true) {
+        gorillaTeacher.setAttribute("visible", "true");
+      }
+
+      console.log("현재 위도:", userLat);
+      console.log("현재 경도:", userLon);
+      console.log("GPS 오차:", accuracy);
+      console.log("고릴라까지 거리:", distanceToGorilla);
     },
 
     function (error) {
