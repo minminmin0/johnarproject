@@ -34,7 +34,7 @@ const GLOVE_SCALE = "0.5 0.5 0.5";
 const GORILLA_SCALE = "3.5 3.5 3.5";
 
 // 회전값
-const CROC_ROTATION = "0 0 0";
+const CROC_ROTATION = "0 180 0";
 const GLOVE_ROTATION = "0 0 0";
 const GORILLA_ROTATION = "0 0 0";
 
@@ -234,7 +234,7 @@ actionBtn.addEventListener("click", function () {
     crocodile.setAttribute("animation__turn", {
       property: "rotation",
       from: CROC_ROTATION,
-      to: "0 120 0",
+      to: "0 260 0",
       dur: 900,
       easing: "easeInOutQuad"
     });
