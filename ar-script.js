@@ -85,7 +85,7 @@ if (navigator.geolocation) {
           clockImage.alt = "8시 30분";
 
           crocodile.setAttribute("visible", "true");
-          crocodile.setAttribute("scale", "8 8 8");
+          crocodile.setAttribute("scale", "4.5 4.5 4.5");
           crocodile.setAttribute("rotation", "0 0 0");
 
           glove.setAttribute("visible", "false");
@@ -188,7 +188,7 @@ actionBtn.addEventListener("click", function () {
 
     // 장갑 등장
     glove.setAttribute("visible", "true");
-    glove.setAttribute("scale", "2.5 2.5 2.5");
+    glove.setAttribute("scale", "0.9 0.9 0.9");
     glove.setAttribute("rotation", "0 0 0");
 
     // 기존 애니메이션 제거
@@ -206,13 +206,6 @@ actionBtn.addEventListener("click", function () {
       easing: "linear"
     });
 
-    glove.setAttribute("animation__grow", {
-      property: "scale",
-      from: "0.3 0.3 0.3",
-      to: "2.5 2.5 2.5",
-      dur: 600,
-      easing: "easeOutBack"
-    });
 
     // 악어가 방향을 트는 느낌
     crocodile.setAttribute("animation__turn", {
@@ -227,7 +220,7 @@ actionBtn.addEventListener("click", function () {
     setTimeout(function () {
       crocodile.setAttribute("animation__shrink", {
         property: "scale",
-        from: "8 8 8",
+        from: "4.5 4.5 4.5",
         to: "0.2 0.2 0.2",
         dur: 1300,
         easing: "easeInQuad"
