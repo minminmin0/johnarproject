@@ -1,8 +1,8 @@
 const storyText = document.getElementById("storyText");
 const gorillaTeacher = document.getElementById("gorillaTeacher");
 
-const gorillaLat = 37.652915;
-const gorillaLon = 127.016362;
+const gorillaLat = 37.6528396;
+const gorillaLon = 127.0163341;
 
 let gorillaShown = false;
 
