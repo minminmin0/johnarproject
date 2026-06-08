@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>GPS AR 고릴라 장면</title>
+  <title>GPS AR 장면</title>
 
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <script src="https://raw.githack.com/AR-js-org/AR.js/3.4.7/three.js/build/ar-threex-location-only.js"></script>
@@ -11,15 +11,23 @@
 
   <link rel="stylesheet" href="ar-style.css">
 </head>
+
 <body>
 
+  <!-- 시계 이미지 -->
   <div id="clockPanel">
     <img id="clockImage" src="images/am830.png" alt="8시 30분">
   </div>
 
+  <!-- 말풍선 -->
   <div id="messagePanel">
     <div id="storyText">GPS 위치를 확인하는 중입니다...</div>
   </div>
+
+  <!-- 장갑 던지기 버튼 -->
+  <button id="actionBtn" class="image-button" style="display: none;">
+    <img id="actionBtnImg" src="images/throwglovebutton.png" alt="장갑 던지기">
+  </button>
 
   <a-scene
     id="arScene"
@@ -29,12 +37,42 @@
     webkit-playsinline
     playsinline
   >
+
     <a-assets>
+      <!-- 악어 모델 -->
+      <a-asset-item id="crocModel" src="models/crocodile.glb"></a-asset-item>
+
+      <!-- 장갑 모델 -->
+      <a-asset-item id="gloveModel" src="models/glove.glb"></a-asset-item>
+
+      <!-- 고릴라 선생님 모델 -->
       <a-asset-item id="gorillaTeacherModel" src="models/gorillaandteacher.glb"></a-asset-item>
     </a-assets>
 
+    <!-- GPS AR 카메라 -->
     <a-camera gps-new-camera="gpsMinDistance: 1"></a-camera>
 
+    <!-- 1단계: 악어 -->
+    <a-entity
+      id="crocodile"
+      gltf-model="#crocModel"
+      gps-new-entity-place="latitude: 37.6516656; longitude: 127.0149836"
+      scale="8 8 8"
+      rotation="0 0 0"
+      visible="false"
+    ></a-entity>
+
+    <!-- 장갑 -->
+    <a-entity
+      id="glove"
+      gltf-model="#gloveModel"
+      gps-new-entity-place="latitude: 37.6516656; longitude: 127.0149836"
+      scale="2.5 2.5 2.5"
+      rotation="0 0 0"
+      visible="false"
+    ></a-entity>
+
+    <!-- 2단계: 고릴라 선생님 -->
     <a-entity
       id="gorillaTeacher"
       gltf-model="#gorillaTeacherModel"
