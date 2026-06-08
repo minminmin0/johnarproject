@@ -283,7 +283,7 @@ actionBtn.addEventListener("click", function () {
 
       storyText.innerHTML =
         "악어가 장갑을 물고 도망갔습니다.<br>" +
-        "존은 서둘러 정문으로 향합니다.";
+        "존은 서둘러 학교로 향합니다.";
 
       hideButton();
     }, 2500);
