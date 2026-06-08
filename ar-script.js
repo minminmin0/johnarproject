@@ -1,14 +1,14 @@
 const storyText = document.getElementById("storyText");
-const teacher = document.getElementById("teacher");
+const gorillaTeacher = document.getElementById("gorillaTeacher");
 
 // ==============================
 // 고릴라 선생님을 띄울 위치
-// 방금 네가 있던 위치 기준
+// 두 번째 사진 위치 기준
 // ==============================
-const targetLat = 37.653095;
-const targetLon = 127.015969;
+const gorillaLat = 37.652915;
+const gorillaLon = 127.016362;
 
-// 두 좌표 사이 거리 계산
+// 두 좌표 사이 거리 계산 함수
 function getDistance(lat1, lon1, lat2, lon2) {
   const R = 6371000;
 
@@ -26,10 +26,10 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
-// 고릴라 선생님 기본 설정
-teacher.setAttribute("visible", "true");
-teacher.setAttribute("scale", "3 3 3");
-teacher.setAttribute("rotation", "0 180 0");
+// 처음부터 계속 보이게 하기
+gorillaTeacher.setAttribute("visible", "true");
+gorillaTeacher.setAttribute("scale", "16 16 16");
+gorillaTeacher.setAttribute("rotation", "180 0 0");
 
 if (navigator.geolocation) {
   navigator.geolocation.watchPosition(
@@ -38,27 +38,28 @@ if (navigator.geolocation) {
       const userLon = position.coords.longitude;
       const accuracy = position.coords.accuracy;
 
-      const distanceToTarget = getDistance(userLat, userLon, targetLat, targetLon);
+      const distanceToGorilla = getDistance(
+        userLat,
+        userLon,
+        gorillaLat,
+        gorillaLon
+      );
 
       storyText.innerHTML =
         "현재 위치 확인 중<br>" +
         "현재 위도: " + userLat.toFixed(6) + "<br>" +
         "현재 경도: " + userLon.toFixed(6) + "<br>" +
-        "목표 위도: " + targetLat + "<br>" +
-        "목표 경도: " + targetLon + "<br>" +
+        "목표 위도: " + gorillaLat + "<br>" +
+        "목표 경도: " + gorillaLon + "<br>" +
         "GPS 오차: 약 " + Math.round(accuracy) + "m<br>" +
-        "고릴라 선생님까지 약 " + Math.round(distanceToTarget) + "m";
+        "고릴라 선생님까지 약 " + Math.round(distanceToGorilla) + "m<br><br>" +
+        "고릴라 선생님은 목표 위치에 계속 표시됩니다.<br>" +
+        "화면을 천천히 돌려보세요.";
 
-      if (distanceToTarget <= 20) {
-        storyText.innerHTML +=
-          "<br><br>고릴라 선생님 표시 구역입니다.<br>화면을 천천히 돌려보세요.";
-      } else {
-        storyText.innerHTML +=
-          "<br><br>테스트 중이라 거리가 멀어도 계속 보이게 해둔 상태입니다.";
-      }
-
-      teacher.setAttribute("visible", "true");
-      teacher.setAttribute("scale", "3 3 3");
+      // 절대 숨기지 않음
+      gorillaTeacher.setAttribute("visible", "true");
+      gorillaTeacher.setAttribute("scale", "16 16 16");
+      gorillaTeacher.setAttribute("rotation", "180 0 0");
     },
 
     function (error) {
