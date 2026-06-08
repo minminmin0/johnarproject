@@ -11,7 +11,6 @@
 
   <link rel="stylesheet" href="ar-style.css">
 </head>
-
 <body>
 
   <div id="clockPanel">
@@ -25,7 +24,7 @@
   <a-scene
     id="arScene"
     vr-mode-ui="enabled: false"
-    arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false"
+    arjs="sourceType: webcam; debugUIEnabled: false"
     renderer="antialias: true; alpha: true; logarithmicDepthBuffer: true"
     webkit-playsinline
     playsinline
@@ -34,16 +33,16 @@
       <a-asset-item id="gorillaTeacherModel" src="models/gorillaandteacher.glb"></a-asset-item>
     </a-assets>
 
-    <a-camera gps-new-camera="gpsMinDistance: 1">
-      <a-entity
-        id="gorillaTeacher"
-        gltf-model="#gorillaTeacherModel"
-        position="0 -1 -6"
-        scale="8 8 8"
-        rotation="0 0 0"
-        visible="false"
-      ></a-entity>
-    </a-camera>
+    <a-camera gps-new-camera="gpsMinDistance: 1"></a-camera>
+
+    <a-entity
+      id="gorillaTeacher"
+      gltf-model="#gorillaTeacherModel"
+      gps-new-entity-place="latitude: 37.652915; longitude: 127.016362"
+      scale="3.5 3.5 3.5"
+      rotation="0 0 0"
+      visible="false"
+    ></a-entity>
 
   </a-scene>
 
