@@ -101,9 +101,9 @@ if (sceneStep === 0) {
   clockImage.alt = "8시 45분";
 
   storyText.innerHTML =
-    "준은 장갑을 악어 쪽으로 던졌습니다.<br>" +
+    "존은 장갑을 악어 쪽으로 던졌습니다.<br>" +
     "악어가 장갑에 정신이 팔린 사이,<br>" +
-    "준은 다시 학교로 달려갔습니다.";
+    "존은 다시 학교로 달려갔습니다.";
 
   // 장갑 보이게 하기
   glove.setAttribute("visible", "true");
