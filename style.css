@@ -14,7 +14,8 @@ html, body {
 /* 전체 동화책 화면 */
 #storybook {
   width: 100vw;
-  height: 100dvh; /* 핵심: 100vh 대신 100dvh */
+  height: 100dvh;
+  min-height: 100svh;
   position: relative;
   background-color: #f0e8d0;
 
@@ -27,12 +28,12 @@ html, body {
 
 /* 동화 이미지 */
 #storyImage {
-  max-width: 100vw;
-  max-height: 100dvh; /* 핵심 */
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
 
   object-fit: contain;
+  object-position: center;
+
   display: block;
   background-color: #f0e8d0;
 }
