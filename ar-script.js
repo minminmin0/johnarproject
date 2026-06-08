@@ -148,7 +148,7 @@ if (navigator.geolocation) {
         if (distanceToGorilla > 25) {
           storyText.innerHTML =
             "악어를 피해 다시 학교로 달려갑니다.<br>" +
-            "어서 정문으로 가야 합니다.";
+            "어서 학교로 가야 합니다.";
 
           gorillaTeacher.setAttribute("visible", "false");
           hideButton();
@@ -166,7 +166,7 @@ if (navigator.geolocation) {
           gorillaTeacher.setAttribute("rotation", GORILLA_ROTATION);
 
           storyText.innerHTML =
-            "정문 앞에 도착한 존은<br>" +
+            "학교 앞에 도착한 존은<br>" +
             "믿기 힘든 장면을 보았습니다.<br>" +
             "선생님이 고릴라에게 붙잡혀 있었습니다.";
 
