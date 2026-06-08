@@ -12,8 +12,8 @@ const gorillaTeacher = document.getElementById("gorillaTeacher");
 // 1단계: 악어 위치
 // 네가 네 번째 사진에서 보고 싶다고 한 위치
 // ==============================
-const crocLat = 37.6520698;
-const crocLon = 127.0150517;
+const crocLat = 37.6516291;
+const crocLon = 127.0149008;
 
 // ==============================
 // 2단계: 고릴라 선생님 위치
@@ -89,7 +89,7 @@ if (navigator.geolocation) {
         }
 
         // 악어 위치에 도착했을 때
-        if (distanceToCroc <= 25 && crocReady === false) {
+        if (distanceToCroc <= 12 && crocReady === false) {
           crocReady = true;
 
           clockImage.src = "images/am830.png";
