@@ -1,27 +1,17 @@
-const actionBtn = document.getElementById("actionBtn");
-const actionBtnImg = document.getElementById("actionBtnImg");
-const clockImage = document.getElementById("clockImage");
 const storyText = document.getElementById("storyText");
-
 const crocodile = document.getElementById("crocodile");
-const glove = document.getElementById("glove");
-const gorillaPlace = document.getElementById("gorillaPlace");
-const gorillaTeacher = document.getElementById("gorillaTeacher");
 
-// 1번 위치: 뭉게네 / 악어 + 장갑
-const crocLat = 37.650197;
-const crocLon = 127.013888;
+// ==============================
+// 악어를 띄울 목표 위치
+// 네가 말한 현재 위치 좌표
+// ==============================
+const crocLat = 37.652859;
+const crocLon = 127.016284;
 
-// 2번 위치: 쌍문제1동 / 고릴라 선생님
-const gorillaLat = 37.650392;
-const gorillaLon = 127.013551;
-
-let sceneStep = 0;
-let crocSceneReady = false;
-
-// 두 좌표 사이 거리 계산
+// 두 좌표 사이 거리 계산 함수
 function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371000;
+  const R = 6371000; // 지구 반지름, 단위 m
+
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
 
@@ -32,47 +22,50 @@ function getDistance(lat1, lon1, lat2, lon2) {
     Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
   return R * c;
 }
 
-// 현재 위치 확인
+// 악어 테스트용 기본 설정
+crocodile.setAttribute("visible", "true");
+crocodile.setAttribute("scale", "20 20 20");
+crocodile.setAttribute("rotation", "0 180 0");
+
 if (navigator.geolocation) {
   navigator.geolocation.watchPosition(
     function (position) {
       const userLat = position.coords.latitude;
       const userLon = position.coords.longitude;
+      const accuracy = position.coords.accuracy;
 
       const distanceToCroc = getDistance(userLat, userLon, crocLat, crocLon);
 
-      console.log("현재 위치:", userLat, userLon);
-      console.log("악어 위치까지 거리:", distanceToCroc);
+      console.log("현재 위도:", userLat);
+      console.log("현재 경도:", userLon);
+      console.log("GPS 오차:", accuracy);
+      console.log("악어까지 거리:", distanceToCroc);
 
-      // 악어 위치 근처에 도착했을 때만 멘트/버튼 등장
-      if (distanceToCroc <= 20 && crocSceneReady === false) {
-  crocSceneReady = true;
+      storyText.innerHTML =
+        "현재 위치 확인 중<br>" +
+        "현재 위도: " + userLat.toFixed(6) + "<br>" +
+        "현재 경도: " + userLon.toFixed(6) + "<br>" +
+        "목표 위도: " + crocLat + "<br>" +
+        "목표 경도: " + crocLon + "<br>" +
+        "GPS 오차: 약 " + Math.round(accuracy) + "m<br>" +
+        "악어까지 약 " + Math.round(distanceToCroc) + "m";
 
-  // 악어 보이게 하기
-  crocodile.setAttribute("visible", "true");
-  crocodile.setAttribute("position", "0 -1 -6");
-  crocodile.setAttribute("scale", "25 25 25");
-  crocodile.setAttribute("rotation", "0 180 0");
-
-  // 장갑은 아직 숨김
-  glove.setAttribute("visible", "false");
-
-  storyText.innerHTML =
-    "악어가 길목을 서성이며 준의 앞을 막고 있습니다.<br>" +
-    "장갑을 던져 악어의 시선을 돌려보세요.";
-
-  actionBtn.style.display = "block";
-}
-      // 아직 멀리 있을 때
-      if (distanceToCroc > 20 && crocSceneReady === false) {
-        storyText.innerHTML =
-          "AR 위치를 찾는 중입니다.<br>" +
-          "악어 장면 위치까지 약 " + Math.round(distanceToCroc) + "m 남았습니다.";
+      if (distanceToCroc <= 20) {
+        storyText.innerHTML +=
+          "<br><br>악어 표시 구역입니다.<br>화면 주변을 천천히 돌려보세요.";
+      } else {
+        storyText.innerHTML +=
+          "<br><br>테스트 중이라 거리가 멀어도 악어는 계속 보이게 해둔 상태입니다.";
       }
+
+      crocodile.setAttribute("visible", "true");
+      crocodile.setAttribute("scale", "20 20 20");
     },
+
     function (error) {
       storyText.innerHTML =
         "위치 권한이 필요합니다.<br>" +
@@ -80,6 +73,7 @@ if (navigator.geolocation) {
 
       console.log("GPS 오류:", error);
     },
+
     {
       enableHighAccuracy: true,
       maximumAge: 0,
@@ -89,131 +83,3 @@ if (navigator.geolocation) {
 } else {
   storyText.innerHTML = "이 브라우저에서는 위치 기능을 사용할 수 없습니다.";
 }
-
-// 버튼 클릭으로 장면 진행
-actionBtn.addEventListener("click", function () {
-
-  // 1단계: 장갑 던지기
-if (sceneStep === 0) {
-  sceneStep = 1;
-
-  clockImage.src = "images/am845.png";
-  clockImage.alt = "8시 45분";
-
-  storyText.innerHTML =
-    "존은 장갑을 악어 쪽으로 던졌습니다.<br>" +
-    "악어가 장갑에 정신이 팔린 사이,<br>" +
-    "존은 다시 학교로 달려갔습니다.";
-
-  // 장갑 보이게 하기
-  glove.setAttribute("visible", "true");
-  glove.setAttribute("position", "-1 1.2 -3");
-  glove.setAttribute("rotation", "0 0 0");
-  glove.setAttribute("scale", "4 4 4");
-
-  // 기존 애니메이션 제거
-  glove.removeAttribute("animation__throw");
-  glove.removeAttribute("animation__spin");
-  crocodile.removeAttribute("animation__shrink");
-
-  // 장갑이 악어 쪽으로 날아가는 연출
-  glove.setAttribute("animation__throw", {
-    property: "position",
-    from: "-1 1.2 -3",
-    to: "2 1.5 -6",
-    dur: 900,
-    easing: "easeOutQuad"
-  });
-
-  // 장갑 회전
-  glove.setAttribute("animation__spin", {
-    property: "rotation",
-    from: "0 0 0",
-    to: "360 720 360",
-    dur: 900,
-    easing: "linear"
-  });
-
-  // 장갑이 날아간 뒤 악어가 작아짐
-  setTimeout(function () {
-    crocodile.setAttribute("animation__shrink", {
-      property: "scale",
-      from: "25 25 25",
-      to: "0.5 0.5 0.5",
-      dur: 1200,
-      easing: "easeInQuad"
-    });
-  }, 900);
-
-  // 악어와 장갑 숨기기
-  setTimeout(function () {
-    crocodile.setAttribute("visible", "false");
-    glove.setAttribute("visible", "false");
-
-    storyText.innerHTML =
-      "악어를 피하느라 15분이나 지나버렸습니다.<br>" +
-      "준은 서둘러 정문으로 향했습니다.";
-
-    actionBtnImg.src = "images/gotogatebutton.png";
-    actionBtnImg.alt = "정문으로 가기";
-  }, 2300);
-}
-
-  // 2단계: 고릴라 선생님 장면
-  else if (sceneStep === 1) {
-    sceneStep = 2;
-
-    clockImage.src = "images/am900.png";
-    clockImage.alt = "9시";
-
-    storyText.innerHTML =
-      "정문 앞에 도착한 존은<br>" +
-      "믿기 힘든 장면을 보았습니다.<br>" +
-      "선생님이 고릴라에게 붙잡혀 있었습니다.";
-
-    gorillaPlace.setAttribute("visible", "true");
-
-    gorillaTeacher.setAttribute("animation__appear", {
-      property: "scale",
-      from: "0.2 0.2 0.2",
-      to: "2.5 2.5 2.5",
-      dur: 900,
-      easing: "easeOutBack"
-    });
-
-    actionBtnImg.src = "images/listenteacherbutton.png";
-    actionBtnImg.alt = "선생님 말 듣기";
-  }
-
-  // 3단계: 선생님 멘트
-  else if (sceneStep === 2) {
-    sceneStep = 3;
-
-    storyText.innerHTML =
-      "“존 패트릭 노먼 멕헤너시.<br>" +
-      "난 지금 커다란 털복숭이 고릴라한테<br>" +
-      "붙들려 매달려 있다.<br>" +
-      "빨리 날 좀 내려다오.”";
-
-    actionBtnImg.src = "images/johnanswerbutton.png";
-    actionBtnImg.alt = "존의 대답";
-  }
-
-  // 4단계: 존의 대답
-  else if (sceneStep === 3) {
-    sceneStep = 4;
-
-    storyText.innerHTML =
-      "존은 선생님을 바라보며 말했습니다.<br><br>" +
-      "“이 동네에 커다란 털복숭이 따위는<br>" +
-      "살지 않아요, 선생님.”";
-
-    actionBtnImg.src = "images/backstorybutton.png";
-    actionBtnImg.alt = "동화책으로 돌아가기";
-  }
-
-  // 5단계: 끝
-  else {
-    location.href = "index.html";
-  }
-});
