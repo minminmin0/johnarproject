@@ -2,11 +2,11 @@ const storyText = document.getElementById("storyText");
 const crocodile = document.getElementById("crocodile");
 
 // ==============================
-// 악어를 띄울 목표 위치
-// 네가 말한 현재 위치 좌표
+// 악어를 띄울 위치
+// 방금 네가 찍은 현재 위치 좌표
 // ==============================
-const crocLat = 37.652859;
-const crocLon = 127.016284;
+const crocLat = 37.653095;
+const crocLon = 127.015969;
 
 // 두 좌표 사이 거리 계산 함수
 function getDistance(lat1, lon1, lat2, lon2) {
@@ -26,9 +26,9 @@ function getDistance(lat1, lon1, lat2, lon2) {
   return R * c;
 }
 
-// 악어 테스트용 기본 설정
+// 악어 기본 설정
 crocodile.setAttribute("visible", "true");
-crocodile.setAttribute("scale", "20 20 20");
+crocodile.setAttribute("scale", "16 16 16");
 crocodile.setAttribute("rotation", "0 180 0");
 
 if (navigator.geolocation) {
@@ -40,11 +40,6 @@ if (navigator.geolocation) {
 
       const distanceToCroc = getDistance(userLat, userLon, crocLat, crocLon);
 
-      console.log("현재 위도:", userLat);
-      console.log("현재 경도:", userLon);
-      console.log("GPS 오차:", accuracy);
-      console.log("악어까지 거리:", distanceToCroc);
-
       storyText.innerHTML =
         "현재 위치 확인 중<br>" +
         "현재 위도: " + userLat.toFixed(6) + "<br>" +
@@ -52,18 +47,13 @@ if (navigator.geolocation) {
         "목표 위도: " + crocLat + "<br>" +
         "목표 경도: " + crocLon + "<br>" +
         "GPS 오차: 약 " + Math.round(accuracy) + "m<br>" +
-        "악어까지 약 " + Math.round(distanceToCroc) + "m";
-
-      if (distanceToCroc <= 20) {
-        storyText.innerHTML +=
-          "<br><br>악어 표시 구역입니다.<br>화면 주변을 천천히 돌려보세요.";
-      } else {
-        storyText.innerHTML +=
-          "<br><br>테스트 중이라 거리가 멀어도 악어는 계속 보이게 해둔 상태입니다.";
-      }
+        "악어까지 약 " + Math.round(distanceToCroc) + "m<br><br>" +
+        "악어는 계속 보이게 해둔 상태입니다.<br>" +
+        "화면을 천천히 돌려보세요.";
 
       crocodile.setAttribute("visible", "true");
-      crocodile.setAttribute("scale", "20 20 20");
+      crocodile.setAttribute("scale", "16 16 16");
+      crocodile.setAttribute("rotation", "0 180 0");
     },
 
     function (error) {
